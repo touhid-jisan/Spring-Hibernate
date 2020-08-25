@@ -1,0 +1,8 @@
+package com.touhid.springdemo;
+
+public class BaseballCoach {
+	@Override
+	public String getDailyWorkout() {
+		
+	}
+}
