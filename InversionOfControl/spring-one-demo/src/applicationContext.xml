@@ -15,17 +15,23 @@
      	class="com.touhid.springdemo.BaseballCoach">
      </bean> -->
     
-    <bean id="myFortune"
+    <bean id="myFortuneService"
     	class="com.touhid.springdemo.HappyFortuneService">
     </bean>
     
     <bean id="myCoach"
     	class="com.touhid.springdemo.TrackCoach">
-    	
     	<!-- Constructor injection -->
-    	<constructor-arg ref="myFortune" />
-<!--     	<constructor-arg ref="myFortune"></constructor-arg> -->
+    	<constructor-arg ref="myFortuneService" />
+		<!-- <constructor-arg ref="myFortune"></constructor-arg> -->
     </bean>
+    
+    <bean id="myCricketCoach"
+    	class = "com.touhid.springdemo.CricketCoach">
+    	<!-- Set up setter injection -->
+    	<property name="fortuneService" ref="myFortuneService" /> 
+    </bean>
+    
     
 </beans>
 
