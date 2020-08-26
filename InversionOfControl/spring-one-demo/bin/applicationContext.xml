@@ -11,9 +11,21 @@
      <!-- <bean id="myCoach"
      	class="com.touhid.springdemo.TrackCoach">
      </bean> -->
-      <bean id="myCoach"
+     <!-- <bean id="myCoach"
      	class="com.touhid.springdemo.BaseballCoach">
-     </bean>
+     </bean> -->
+    
+    <bean id="myFortune"
+    	class="com.touhid.springdemo.HappyFortuneService">
+    </bean>
+    
+    <bean id="myCoach"
+    	class="com.touhid.springdemo.TrackCoach">
+    	
+    	<!-- Constructor injection -->
+    	<constructor-arg ref="myFortune" />
+<!--     	<constructor-arg ref="myFortune"></constructor-arg> -->
+    </bean>
     
 </beans>
 
