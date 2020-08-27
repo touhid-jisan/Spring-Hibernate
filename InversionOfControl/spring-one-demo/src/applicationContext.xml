@@ -6,6 +6,9 @@
     http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <!-- load tje properties file : sport properties -->
+    <context:property-placeholder location="classpath:sport.properties"/> 
 
     <!-- Define your beans here -->
      <!-- <bean id="myCoach"
@@ -30,8 +33,14 @@
     	class = "com.touhid.springdemo.CricketCoach">
     	<!-- Set up setter injection -->
     	<property name="fortuneService" ref="myFortuneService" /> 
-    	<property name="email" value="touhid@gmail.com"></property>
-    	<property name="team" value="khulna royals"></property>
+    	
+    	<!--inject literal values :  hard coded -->
+    	<!-- <property name="email" value="touhid@gmail.com"></property>
+    	<property name="team" value="khulna royals"></property> -->
+    	
+    	<!-- inject literal values : from properties file -->
+    	<property name="email" value="${foo.email}"/>
+    	<property name="team" value="${foo.team}" />
     </bean>
     
     
