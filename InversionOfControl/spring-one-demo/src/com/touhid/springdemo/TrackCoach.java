@@ -19,4 +19,15 @@ public class TrackCoach implements Coach {
 	public String getDailyFortune() {
 		return "just do it(track coach) : " +fortuneService.getFortune(); 
 	}
+	
+	/* -------- Spring Bean Scope ---------- */ 
+	// add an init method
+	public void doMyStratupStaff() {
+		System.out.println("TrackCoach : inside doMyStratupStaff method");
+	}
+	
+	// add a destroy method
+	public void doMyCleanupStaff() {
+		System.out.println("TrackCoach : inside doMyCleanupStaff method");
+	}
 }
