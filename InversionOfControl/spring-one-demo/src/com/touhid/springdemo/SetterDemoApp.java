@@ -16,6 +16,10 @@ public class SetterDemoApp {
 		System.out.println(theCoach.getDailyFortune());
 		System.out.println(theCoach.getDailyWorkout());
 		
+		// call out new methods to get the literal values
+		System.out.println(theCoach.getEmail());
+		System.out.println(theCoach.getTeam());
+		
 		// close the context
 		context.close();
 	}

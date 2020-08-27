@@ -30,7 +30,10 @@
     	class = "com.touhid.springdemo.CricketCoach">
     	<!-- Set up setter injection -->
     	<property name="fortuneService" ref="myFortuneService" /> 
+    	<property name="email" value="touhid@gmail.com"></property>
+    	<property name="team" value="khulna royals"></property>
     </bean>
+    
     
     
 </beans>
