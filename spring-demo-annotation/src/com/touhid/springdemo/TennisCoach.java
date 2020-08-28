@@ -6,13 +6,17 @@ import org.springframework.stereotype.Component;
 //@Component("thatSillyCoach")
 @Component // default bean id is "tennisCoach"
 public class TennisCoach implements Coach {
-
+	
+	// Field Injection with annotation
+	@Autowired
 	private FortuneService theFortuneService;
 	
 	// constructor injection
 	/*
 	 * @Autowired public TennisCoach(FortuneService theFortuneService) {
 	 * this.theFortuneService = theFortuneService; }
+	 */
+	
 	// default constructor
 	
 	public TennisCoach() {
@@ -22,17 +26,17 @@ public class TennisCoach implements Coach {
 	// defining a setter method for injections, 
 	// here we can use any method instead setFortuneService()
 	// it will bea called method injection
-	@Autowired
-	public void setFortuneService(FortuneService theFortuneService) {
-		System.out.println("TennisCoach: setFortuneService() method");
-		this.theFortuneService = theFortuneService;
-	}
+	/*
+	 * @Autowired public void setFortuneService(FortuneService theFortuneService) {
+	 * System.out.println("TennisCoach: setFortuneService() method");
+	 * this.theFortuneService = theFortuneService; }
+	 * 
+	 * // autowired methods must be used with parameters
+	 * 
+	 * @Autowired public void doSomeCrazyStaff(FortuneService theFortuneService) {
+	 * System.out.println("TennisCoach: doSomeCrazyStaff() method"); }
+	 */
 	
-	// autowired methods must be used with parameters
-	@Autowired
-	public void doSomeCrazyStaff(FortuneService theFortuneService) {
-		System.out.println("TennisCoach: doSomeCrazyStaff() method");
-	}
 	@Override
 	public String getDailyWorkout() {
 		return "Practice backhand";
