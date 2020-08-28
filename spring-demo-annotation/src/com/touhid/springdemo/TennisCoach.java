@@ -2,10 +2,15 @@ package com.touhid.springdemo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 
 //@Component("thatSillyCoach")
 @Component // default bean id is "tennisCoach"
+//@Scope("prototype")
 public class TennisCoach implements Coach {
 	
 	// Field Injection with annotation
@@ -50,4 +55,31 @@ public class TennisCoach implements Coach {
 		return theFortuneService.getFortune();
 	}
 
+	// define init method
+	// code will execute after constructor and after injection of dependencies
+	@PostConstruct
+	public void doMyStartUpStuff() {
+		System.out.println("TennisCoach : inside my doMyStartUpStuff() method");
+	}
+	
+	
+	// define destroy method
+	// code will execute before bean is distroyed
+	@PreDestroy
+	public void doMyCleanUpStuff() {
+		System.out.println("TennisCoach : inside my doMyCleanUpStuff() method");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
