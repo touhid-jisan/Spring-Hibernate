@@ -4,11 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Spring MVC Demo</title>
+<title>Hello World of Spring!</title>
 </head>
 <body>
-<h2>Spirng MVC Practice</h2>
-<br>
-<a  href="showForm">Show Hello World Form</a>
+Student Name : ${param.studentName}
 </body>
 </html>
