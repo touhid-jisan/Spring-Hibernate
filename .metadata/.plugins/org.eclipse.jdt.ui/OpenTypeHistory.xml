@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <typeInfoHistroy>
-    <typeInfo handle="=spring-demo-annotation/src&lt;com.touhid.springdemo{Coach.java[Coach" modifiers="513" timestamp="1598554974291"/>
+    <typeInfo handle="=spring-demo-annotation/src&lt;com.touhid.springdemo{Coach.java[Coach" modifiers="513" timestamp="1598625317840"/>
+    <typeInfo handle="=spring-demo-annotation/lib\/spring-context-5.2.8.RELEASE.jar&lt;org.springframework.format(FormatterRegistrar.class[FormatterRegistrar" modifiers="1537" timestamp="1598553421083"/>
+    <typeInfo handle="=spring-demo-annotation/lib\/spring-context-5.2.8.RELEASE.jar&lt;org.springframework.format(Formatter.class[Formatter" modifiers="1537" timestamp="1598553421083"/>
+    <typeInfo handle="=spring-demo-annotation/src&lt;com.touhid.springdemo{FortuneService.java[FortuneService" modifiers="513" timestamp="1598611985071"/>
 </typeInfoHistroy>
