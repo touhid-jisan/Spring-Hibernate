@@ -10,7 +10,12 @@
 <h2>Spirng MVC Practice</h2>
 <br>
 <a  href="hello/showForm">Controller Level Request Mapping</a>
+
 <br><br>
 <a  href="showForm">Show Hello World Form</a>
+
+<br> <br>
+<a href="student/showForm">Student Registration</a>
+
 </body>
 </html>
