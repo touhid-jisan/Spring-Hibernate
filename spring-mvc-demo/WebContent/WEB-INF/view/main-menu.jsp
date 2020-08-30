@@ -17,5 +17,8 @@
 <br> <br>
 <a href="student/showForm">Student Registration</a>
 
+<br> <br>
+<a href="customer/showForm">Customer Registration with Hibernate Validation</a>
+
 </body>
 </html>
