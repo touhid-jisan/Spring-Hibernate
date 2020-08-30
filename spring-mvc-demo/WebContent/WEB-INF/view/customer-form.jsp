@@ -19,7 +19,13 @@
 		First Name : <form:input path="firstName"/><br><br>
 		Last Name(*) : <form:input path="lastName"/> 
 		<form:errors path="lastName" cssClass="error"/>
+		<br><br>
+		Enter ID : <form:input path="idNumber"/>
+		<form:errors path="idNumber" cssClass="error"/>
+		<br><br>
 		
+		Postal Code: <form:input path="postalCode"/>
+		<form:errors path="postalCode" cssClass="error"/>
 		<br><br>
 		
 		<input type="submit"/>
