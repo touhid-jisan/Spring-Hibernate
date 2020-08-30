@@ -8,7 +8,9 @@
 First Name : ${customer.firstName} <br><br>
 Last Name : ${customer.lastName	} <br><br>
 ID: ${customer.idNumber }<br><br>
-Postal Code : ${customer.postalCode}
+Postal Code : ${customer.postalCode} <br><br>
+
+Course Code : ${customer.courseCode}
 </head>
 <body>
 
