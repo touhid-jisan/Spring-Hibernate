@@ -6,7 +6,7 @@ import org.hibernate.cfg.Configuration;
 
 import com.touhid.hibernate.demo.entity.Student;
 
-public class CreateStudentDemo {
+public class DeleteStudentDemo {
 
 	public static void main(String[] args) {
 		
@@ -20,20 +20,25 @@ public class CreateStudentDemo {
 		Session session = factory.getCurrentSession();
 		
 		try {
-			/* CRUD - CREATE */
-			// use the session object to save java object
-			System.out.println("Creating new student object");
-			Student tempStudent = new Student("Touhid", "Islam", "touhid@gmail.com");
-			
-			// create a student object
+			/* CRUD - Delete */
+			/* Query 1*/
+			int studentId = 6;
 			session.beginTransaction();
-			
-			// save the student object
-			System.out.println("saving the student...");
-			session.save(tempStudent);
-			
-			// commit transaction
+			/* query 1 for deleting
+			 * 
+			 * Student myStudent = session.get(Student.class, studentId);
+			 * System.out.println("Before deleting " + myStudent);
+			 * System.out.println("Deleting Students...");
+			 * session.delete(myStudent); 
+			 * 
+			 */
+			/* Query 2*/
+			session.createQuery("delete from Student where id=" + studentId).executeUpdate();
 			session.getTransaction().commit();
+			System.out.println("Deleted");
+			
+			
+			
 		} finally {
 			factory.close();
 		}
