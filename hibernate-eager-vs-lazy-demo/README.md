@@ -1,339 +1,112 @@
-## **Real -World Project  Requirement**
+# **Fetch Types: Eager vs Lazy Loading**
 
-- If you delete an instructor, **DO NOT** delete the courses
+- ###### **When we fetch / retrieve data, should we retrieve everything?**
 
-- If you delete a course, **DO NOT** delete the instructor
+  - **Eager** will retrieve everything
+  - **Lazy** will retrieve on request
+
+  #### **Eager Loading**
+
+  - **Eager** loading will load all dependent entities 
+    -  Load instructor and all of their courses at onces
+  - In our app, if we are searching for a course by keyword we **only want a list of matching course**. But **Eager Loading** would still **load all students** for each course. not good!!!
+
+*********<u>Prefer Lazy loading instead of Eager Loading</u>*********
+
+#### 	Lazy Loading
+
+- - Lazy Loading will load the main entity first.
+  - Load dependent entities on demand (lazy) means when we call the dependent table then it will load.
+
+
+
+### <u>Fetch Type</u>
+
+- When you define the mapping relationship 
+
+- You can specify the fetch type: **EAGER** or **LAZY**
+
+  ```java
+  @Entity
+  @Table(name="instructor")
+  public class Instructor {
+      ...
+      @OneToMany(fetch=FetchType.LAZY, mappedBy="instructor")
+      private List<Course> courses;
+      
+      ...
+  }
+  ```
+
+  **Default Fetch Type**
+
+  |   Mapping   | Default Fetch Type |
+  | :---------: | :----------------: |
+  |  @OneToOne  |  FetchType.EAGER   |
+  | @OneToMany  |   FetchType.LAZY   |
+  | @ManyToOne  |  FetchType.EAGER   |
+  | @ManyToMany |   FetchType.LAZY   |
+
+
+
+### <u>More about Lazy Loading</u>
+
+- **To retrieve lazy data, we need to open Hibernate Session**
+
+- Retrieve lazy data using
+  - **Option 1:** **session.get()** and call appropiate getter method(s)
+  - **Option 2:** Hibernate query with HQL
+  
+- Many Other techniques available but the two above are most common
 
   
 
-## Development Process: One-to-Many 
+  > **Option 1:  session.get() and call appropiate getter method(s)**
 
-1. Prep Work - Define database table
+  ```java
+  try {
+  	session.beginTransaction();
+  	int theId = 2;
+  	Instructor tempInstructor = session.get(Instructor.class, theId);
+  			
+  	System.out.println("Temp Instructor : " + tempInstructor);
+  			
+  	// get courses from instructor id 2
+  	System.out.println("Courses : " + tempInstructor.getCourses());
+  			
+  	session.getTransaction().commit();
+  	System.out.println("DONE!!!!");
+  }finally {
+  	session.close(); // clean up the code
+  	factory.close();
+  }
+  ```
 
-2. Create Course Class
+  > **Option 2: Hibernate query with HQL** 
 
-3. Update Instructor Class
+  ```java
+  try {
+  	session.beginTransaction();
+  	// option 2: Hibernate query with HQL	
+  	// create the instructor from db 
+      int theId = 2;
+      // as we are using "JOIN FETCH i.courses" in the HQL query it will also load the course table 
+      // so if we want to get access the course table after sesson.close() it will work
+      Query<Instructor> query = session.createQuery("select i from Instructor i " +
+                                                    "JOIN FETCH i.courses "+
+                                                    "where i.id =:theInstructorId", Instructor.class);
+  	query.setParameter("theInstructorId", theId);
+  	// execute query and get instructor
+  		
+      Instructor tempInstructor = query.getSingleResult();
+      System.out.println("Temp Instructor : " + tempInstructor);
+      session.getTransaction().commit();
+      System.out.println("DONE!!!!");
+  	}
+  finally {
+     	session.close(); // clean up the code
+      factory.close();
+  }		
+  ```
 
-4. Create Main App
-
-   
-
-## Step 1: Database Table
-
-
-
-> **File 1 : create-db.sql**
-
-```mysql
-CREATE TABLE course (
-	id int(11) NOT NULL AUTO_INCREMENT,
-    title varchar(128)	DEFAULT NULL,
-    instructor_id int(11) DEFAULT NULL,
-    
-    PRIMARY KEY (ID),
-    UNIQUE KEY TITLE_UNIQUE (title), # prevent duplicate course title 
-    
-    # Foreign Key Defining
-    KEY FK_INSTRUCTOR_idx (instructor_id),
-    CONSTRAINT FK_INSTRUCTOR FOREIGN KEY (instructor_id) REFERENCES instructor(id) 
-    ....
-    ....
-);
-```
-
-<img src="/home/boogeyman/Pictures/Kazam_screenshot_00001.png" alt="Kazam_screenshot_00001" style="zoom: 50%;" />
-
-
-
-## Step 2: Create Course Class
-
-> **Create Course  Class**
-
-```java
-@Entity
-@Table(name = "course")
-public class Course {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-	private int id;
-    
-    @Column(name = "title")
-    private String title;
-
-    ....
-    // constructor, getters, setters
-}
-```
-
-> **Create Course Class - @ManyToOne**
-
-```java
-@Entity
-@Table(name = "course")
-public class Course {
-    
-     ....
-     @ManyToOne
-     @JoinCloumn(name = "instructor_id")
-     private Instructor instructor;
-     ....
-     
-    // constructor, getters, setters
-}
-```
-
-
-
-## Step 3: Update Instructor - Reference Courses
-
-> **file: <u>*Instructor.java***</u>
-
-```java
-@Entity
-@Table(name = "instructor")
-public class Instructor {
-    ...
-    private List<Course> courses;
-    
-    public List<Course> getCourses() {
-        return courses;
-    }
-    
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
-    
-}
-```
-
-> **Add @OneToMany annotation**
-
-```java
-@Entity
-@Table(name = "instructor")
-public class Instructor {
-    ...
-    @OneToMany(mappedBy = "instructor")
-    private List<Course> courses;
-    
-    public List<Course> getCourses() {
-        return courses;
-    }
-    
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
-}
-```
-
-> **mappedBy Explanation*****
-
-- mappedBy tells Hibernate
-  - Look at the Instructor property in the Course.java Class
-  - Use information from the Course.java class @JoinColumn
-  - To help find associated courses for instructor
-
-> **Add Support for Cascading in <u>*Instructor.java</u>* class (do not apply cascading delete)**
-
-```java
-// Instructor.java
-
-@Entity
-@Table(name = "instructor")
-public class Instructor {
-    ...
-    @OneToMany(mappedBy = "instructor",
-              cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                        CascadeType.DETACH, CascadeType.REFRESH})
-    private List<Course> courses;
-    
-    public List<Course> getCourses() {
-        return courses;
-    }
-    
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
-}
-```
-
-> **Add support for Cascading in *<u>Course.java</u>* Class (do not apply cascading delete)**
-
-```java
-// Course.java
-
-@Entity
-@Table(name = "course")
-public class Course {
-    
-     ....
-     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE,
-                          CascadeType.DETACH, CascadeType.REFRESH
-                          })
-     @JoinCloumn(name = "instructor_id")
-     private Instructor instructor;
-     ....
-     
-    // constructor, getters, setters
-}
-```
-
-> **Add Convenience methods for bi-directional in *<u>Instructor.java</u>* Class**
-
-```java
-// Instructor.java
-
-@Entity
-@Table(name = "instructor")
-public class Instructor {
-    ...
-    @OneToMany(mappedBy = "instructor",
-              cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                        CascadeType.DETACH, CascadeType.REFRESH})
-    private List<Course> courses;
-    // getters , setters
-    
-    // add convenience methods for bi-directional relationship
-    public void add (Course tempCourse) {
-        if(courses == null) {
-            courses = new ArrayList<>();
-        }
-        
-        // bi-directional link starts
-        courses.add(tempCourse);
-        tempCourse.setInstructor(this);
-        // bi-directional link ends
-    }
-}
-```
-
-
-
-> ### FInal Schema of Dtatbase
-
-![Kazam_screenshot_00002](/home/boogeyman/Pictures/Kazam_screenshot_00002.png)
-
-## Step 4: Add Main App
-
-> **CreateInstructorDemo.java**
-
-```java
-public class CreateInstructorDemo {
-
-	public static void main(String[] args) {
-		
-		// session factory
-		SessionFactory factory = new Configuration()
-				.configure("hibernate.cfg.xml")
-				.addAnnotatedClass(Instructor.class)
-				.addAnnotatedClass(InstructorDetail.class)
-				.addAnnotatedClass(Course.class)
-				.buildSessionFactory();
-		
-		// create session
-		Session session = factory.getCurrentSession();
-		
-		try {
-			// create the objects  
-			Instructor tempInstructor = new Instructor("Shahriar", "Anik", "Anik@gmail.com");
-			InstructorDetail tempInstructorDetail = new InstructorDetail("youtube.com/Anik", "teaching");
-			
-			// associate the object
-			tempInstructor.setInstructorDetail(tempInstructorDetail);
-			
-			session.beginTransaction();
-			session.save(tempInstructor); // this will also save the instructor_detail object because of CascadeType.ALL
-			session.getTransaction().commit();
-			System.out.println("DONE!!!!");
-		}finally {
-			session.close(); // clean up the code
-			factory.close();
-		}
-	}
-}
-```
-
-> **GetInstructorCourses.java**
-
-```java
-public class GetInstructorCourses {
-
-	public static void main(String[] args) {
-		
-		// session factory
-		SessionFactory factory = new Configuration()
-				.configure("hibernate.cfg.xml")
-				.addAnnotatedClass(Instructor.class)
-				.addAnnotatedClass(InstructorDetail.class)
-				.addAnnotatedClass(Course.class)
-				.buildSessionFactory();
-		
-		// create session
-		Session session = factory.getCurrentSession();
-		
-		try {
-			session.beginTransaction();
-			
-			// create the instructor from db
-			int theId = 2;
-			Instructor tempInstructor = session.get(Instructor.class, theId);
-			
-			System.out.println("Temp Instructor : " + tempInstructor);
-			
-			// get courses from instructor id 2
-			System.out.println("Courses : " + tempInstructor.getCourses());
-			
-			session.getTransaction().commit();
-			System.out.println("DONE!!!!");
-		}finally {
-			session.close(); // clean up the code
-			factory.close();
-		}
-		
-	}
-
-}
-
-```
-
-> **DeleteCourseDemo.java**
-
-```java
-public class DeleteCourseDemo {
-
-	public static void main(String[] args) {
-		
-		// session factory
-		SessionFactory factory = new Configuration()
-				.configure("hibernate.cfg.xml")
-				.addAnnotatedClass(Instructor.class)
-				.addAnnotatedClass(InstructorDetail.class)
-				.addAnnotatedClass(Course.class)
-				.buildSessionFactory();
-		
-		// create session
-		Session session = factory.getCurrentSession();
-		
-		try {
-
-			session.beginTransaction();
-			int theId = 10;
-			Course tempCourse = session.get(Course.class, theId);
-			
-			session.delete(tempCourse);
-			
-			session.getTransaction().commit();
-			System.out.println("DONE!!!!");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			// handles connection leak
-			session.close();
-			factory.close();
-		}
-	}
-}
-```
-
+  

@@ -4,13 +4,12 @@ package com.touhid.hibernate.demo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 
 import com.touhid.hibernate.demo.entity.Course;
 import com.touhid.hibernate.demo.entity.Instructor;
 import com.touhid.hibernate.demo.entity.InstructorDetail;
 
-public class EagerLazyDemo {
+public class EagerLazyFetchJoinDemoHQL {
 
 	public static void main(String[] args) {
 		
@@ -28,17 +27,14 @@ public class EagerLazyDemo {
 		try {
 			session.beginTransaction();
 			
-			// option 2: Hibernate query with HQL	
 			// create the instructor from db 
 			int theId = 2;
-			Query<Instructor> query = session.createQuery("select i from Instructor i JOIN FETCH i.courses where i.id =:theInstructorId", Instructor.class);
-			query.setParameter("theInstructorId", theId);
-			
-			// execute query and get instructor
-			Instructor tempInstructor = query.getSingleResult();
+			Instructor tempInstructor = session.get(Instructor.class, theId);
 			
 			System.out.println("Temp Instructor : " + tempInstructor);
 			
+			// get courses from instructor id 2
+			System.out.println("Courses : " + tempInstructor.getCourses());
 			
 			session.getTransaction().commit();
 			System.out.println("DONE!!!!");
