@@ -144,3 +144,158 @@ public class Student {
 
 ## Step 4: Create Main App
 
+
+
+> #### 1. Create Courses With Students
+
+```
+file: CreateCourseAndStudentDemo.java
+```
+
+```java
+try {
+	session.beginTransaction();
+			
+	// create course
+	Course tempCourse = new Course("CSE-110");
+	session.save(tempCourse);
+			
+	// create 2 student obj	
+	Student tempStuent1 = new Student("Touhid", "Jisan", "touhid@gmail.com");
+	Student tempStuent2 = new Student("Shahriar", "Anik", "shah@gmail.com");
+			
+	tempCourse.addStudent(tempStuent1);
+	tempCourse.addStudent(tempStuent2);
+    
+	session.save(tempStuent1); 
+	session.save(tempStuent2);  
+    
+	System.out.println("\n------------------\n" + tempCourse.getStudents() + "\n-------------------");
+			
+    session.getTransaction().commit();
+	System.out.println("DONE!!!!");
+}finally {
+	session.close(); // clean up the code
+    factory.close();
+}
+```
+
+
+
+> #### **2. Add more courses to a specific students** 
+
+```
+file: AddCoursesForTouhidDemo.java
+```
+
+```java
+try {
+	session.beginTransaction();
+			
+    // 1. get the student touhid from database
+    // 2. create more courses
+    // 3. add student to courses
+    // 4. save the courses 
+			
+	int studentId = 1;
+    Student tempStudent = session.get(Student.class, studentId);
+			
+    Course tempCourse1 = new Course("BUS-101");
+    Course tempCourse2 = new Course("MAT-110");
+    Course tempCourse3 = new Course("CSE-111");
+
+    tempCourse1.addStudent(tempStudent);
+    tempCourse2.addStudent(tempStudent);
+    tempCourse3.addStudent(tempStudent);
+			
+			
+    session.save(tempCourse1);
+    session.save(tempCourse2);
+    session.save(tempCourse3);
+			
+    session.getTransaction().commit();
+    System.out.println("DONE!!!!");
+}finally {
+    session.close(); // clean up the code
+    factory.close();
+}
+```
+
+
+
+> #### **3. Get Courses for Specific Students** 
+
+```
+file: GetCoursesForTouhidDemo.java
+```
+
+```java
+try {
+	session.beginTransaction();
+
+	int studentId = 1;
+	Student tempStudent = session.get(Student.class, studentId);
+	System.out.println("\n----------------" +"\nTemp Student : "+ tempStudent + "\n-----------------");
+	System.out.println("\n----------------" +"\nAlll COurse list : "+ tempStudent.getCourses() + "\n-----------------");
+			
+	int studentId2 = 2;
+	Student tempStudent2 = session.get(Student.class, studentId2);		
+	System.out.println("\n----------------" +"\nTemp Student : "+ tempStudent2 + "\n-----------------");
+	System.out.println("\n----------------" +"\nAlll COurse list : "+ tempStudent2.getCourses() + "\n-----------------");
+			
+	session.getTransaction().commit();
+	System.out.println("DONE!!!!");
+}finally {
+	session.close(); // clean up the code
+	factory.close();
+}
+```
+
+
+
+> #### 4. Delete Student Without Deleting Any Course
+
+```
+file: DeleteStudentWithoutDeletingCourse.java
+```
+
+```java
+try {
+	session.beginTransaction();
+			
+	int studentId = 1;
+	Student tempStudent= session.get(Student.class, studentId);
+	session.delete(tempStudent);
+			
+	session.getTransaction().commit();
+	System.out.println("DONE!!!!");
+}finally {
+	session.close(); // clean up the code
+	factory.close();
+}
+```
+
+
+
+> #### 5. Delete Course Without Deleting Student
+
+```
+file: DeleteCourseWithoutDeletingStudent.java
+```
+
+```java
+try {
+	session.beginTransaction();
+			
+	int courseId = 10;
+    Course tempcourse= session.get(Course.class, courseId);
+    session.delete(tempcourse);
+		
+    session.getTransaction().commit();
+	System.out.println("DONE!!!!");
+}finally {
+	session.close(); // clean up the code
+	factory.close();
+}
+```
+

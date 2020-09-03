@@ -11,7 +11,7 @@ import com.touhid.hibernate.demo.entity.InstructorDetail;
 import com.touhid.hibernate.demo.entity.Review;
 import com.touhid.hibernate.demo.entity.Student;
 
-public class CreateCourseAndStudentDemo {
+public class AddMoreCoursesForTouhidDemo {
 
 	public static void main(String[] args) {
 		
@@ -31,20 +31,29 @@ public class CreateCourseAndStudentDemo {
 		try {
 			session.beginTransaction();
 			
-			// create course
-			Course tempCourse = new Course("CSE-110");
-			session.save(tempCourse);
+			// 1. get the student touhid from database
+			// 2. create more courses
+			// 3. add student to courses
+			// 4. save the courses 
 			
-			System.out.println("saved course : " + tempCourse);
+			int studentId = 1;
+			Student tempStudent = session.get(Student.class, studentId);
 			
-			Student tempStuent1 = new Student("Touhid", "Jisan", "touhid@gmail.com");
-			Student tempStuent2 = new Student("Shahriar", "Anik", "shah@gmail.com");
+			System.out.println("\n----------------" + "Before adding more courses : " + tempStudent.getCourses() + "\n----------------");
 			
-			tempCourse.addStudent(tempStuent1);
-			tempCourse.addStudent(tempStuent2);
-			session.save(tempStuent1); 
-			session.save(tempStuent2);  
-			System.out.println("\n------------------\n" + tempCourse.getStudents() + "\n-------------------");
+			Course tempCourse1 = new Course("BUS-101");
+			Course tempCourse2 = new Course("MAT-110");
+			Course tempCourse3 = new Course("CSE-111");
+
+			tempCourse1.addStudent(tempStudent);
+			tempCourse2.addStudent(tempStudent);
+			tempCourse3.addStudent(tempStudent);
+			
+			
+			session.save(tempCourse1);
+			session.save(tempCourse2);
+			session.save(tempCourse3);
+			
 			session.getTransaction().commit();
 			System.out.println("DONE!!!!");
 		}finally {

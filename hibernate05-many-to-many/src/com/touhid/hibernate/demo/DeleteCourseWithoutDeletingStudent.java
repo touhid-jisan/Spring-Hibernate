@@ -9,8 +9,9 @@ import com.touhid.hibernate.demo.entity.Course;
 import com.touhid.hibernate.demo.entity.Instructor;
 import com.touhid.hibernate.demo.entity.InstructorDetail;
 import com.touhid.hibernate.demo.entity.Review;
+import com.touhid.hibernate.demo.entity.Student;
 
-public class CreateCourseAndReviewDemo {
+public class DeleteCourseWithoutDeletingStudent {
 
 	public static void main(String[] args) {
 		
@@ -20,6 +21,7 @@ public class CreateCourseAndReviewDemo {
 				.addAnnotatedClass(Instructor.class)
 				.addAnnotatedClass(InstructorDetail.class)
 				.addAnnotatedClass(Course.class)
+				.addAnnotatedClass(Student.class)
 				.addAnnotatedClass(Review.class)
 				.buildSessionFactory();
 		
@@ -29,15 +31,10 @@ public class CreateCourseAndReviewDemo {
 		try {
 			session.beginTransaction();
 			
-			// 1. get the course
-			// 2. print the course
-			// 3. print the course reviews
+			int courseId = 10;
+			Course tempcourse= session.get(Course.class, courseId);
 			
-			int theId = 10;
-			Course tempCourse = session.get(Course.class, theId);
-			
-			System.out.println("TempCourse : " + tempCourse);
-			System.out.println("Reviews : "  + tempCourse.getReviews());
+			session.delete(tempcourse);
 			
 			session.getTransaction().commit();
 			System.out.println("DONE!!!!");

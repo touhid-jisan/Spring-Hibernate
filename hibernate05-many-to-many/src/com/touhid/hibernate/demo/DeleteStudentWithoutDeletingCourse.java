@@ -11,7 +11,7 @@ import com.touhid.hibernate.demo.entity.InstructorDetail;
 import com.touhid.hibernate.demo.entity.Review;
 import com.touhid.hibernate.demo.entity.Student;
 
-public class CreateCourseAndStudentDemo {
+public class DeleteStudentWithoutDeletingCourse {
 
 	public static void main(String[] args) {
 		
@@ -31,20 +31,11 @@ public class CreateCourseAndStudentDemo {
 		try {
 			session.beginTransaction();
 			
-			// create course
-			Course tempCourse = new Course("CSE-110");
-			session.save(tempCourse);
+			int studentId = 1;
+			Student tempStudent= session.get(Student.class, studentId);
 			
-			System.out.println("saved course : " + tempCourse);
+			session.delete(tempStudent);
 			
-			Student tempStuent1 = new Student("Touhid", "Jisan", "touhid@gmail.com");
-			Student tempStuent2 = new Student("Shahriar", "Anik", "shah@gmail.com");
-			
-			tempCourse.addStudent(tempStuent1);
-			tempCourse.addStudent(tempStuent2);
-			session.save(tempStuent1); 
-			session.save(tempStuent2);  
-			System.out.println("\n------------------\n" + tempCourse.getStudents() + "\n-------------------");
 			session.getTransaction().commit();
 			System.out.println("DONE!!!!");
 		}finally {
