@@ -457,10 +457,6 @@ We have used DEBUG with both the appenders. All the possible options are:
 > 	}
 > }
 > ```
->
-> 
-
-
 
 > **TodoService.java**
 >
@@ -502,15 +498,206 @@ We have used DEBUG with both the appenders. All the possible options are:
 > 	}
 > }
 > ```
->
-> 
 
-> list-todos.jsp
+> **list-todos.jsp**
 >
 > ```jsp
 > <body>
 > 	${todos}
 > </body>
 > ```
+
+
+
+#### Model 1 Architecture : 
+
+Jsp
+
+No Servlets or Controllers
+
+#### Model 2 Architecture or MVC
+
+- Model - Todo.java
+- View - login.jsp 
+- Controller - LoginServlet, TodoServlet ....
+
+#### Modification of Model 2 Architecture
+
+Front Controller:  DispatcherServlet ->  All the request will go first to dispatcher servlet and then the dispatcher servlet will decide which one to call
+
+
+
+# Spring Modules
+
+![](README.assets/spring-overview.png)
+
+## Step 9: @SessionAttribute
+
+- **Session** vs **Model** vs Request.
+- **Be cautious** about what you use Session for.
+- **@SessionAttributes("username")** and how it works?
+- Why use Model? "adding elements directly to the **HttpServletRequest** (as request attributes) would seem to serve the same purpose. The reason to do this is obvious when taking a look at one of the requirements we have set for the MVC framework: It should be as view-agnostic as possible, which means we’d like to be able to incorporate view technologies not bound to the **HttpServletRequest** as well." - Rod Johnson et. al’s book Professional Java Development with the Spring Framework
+- Spring documentation states that the **@SessionAttributes** annotation “list the names of model attributes which should be transparently stored in the session or some conversational storage.”
+
+
+
+> **/com/touhid/login/LoginController.java**
 >
+> ```java
+> @Controller
+> @SessionAttributes("username")
+> public class LoginController {
+> 	
+> 	@Autowired
+> 	private LoginValidationService validService;
+> 	
+> 	@RequestMapping(value="/", method=RequestMethod.GET )
+> 	public String showLoginPage(){
+> 		return "login";
+> 	}
+> 	
+> 	@RequestMapping(value="/login-form", method=RequestMethod.POST )
+> 	public String showWelcomePage(ModelMap model, @RequestParam String user_name, @RequestParam String user_password){
+> 		if(!validService.isValid(user_name, user_password)) {
+> 			model.put("errorMessage", "Wrong Username or password");
+> 			return "login";
+> 		}
+> 		
+> 		model.put("username", user_name);
+> 		model.put("password", user_password);
+> 		return "welcome";
+> 	}
+> }
+> ```
+
+------
+
+> **/com/touhid/login/LoginValidationService.java**
+>
+> ```java
+> @Service
+> public class LoginValidationService {
+> 	public boolean isValid(String username, String password) {	
+> 		if(username.equals("touhid") && password.equals("jisan")) {
+> 			return true;
+> 		}
+> 		return false;
+> 	}	
+> }
+> ```
+
+------
+
+> **/com/touhid/todo/Todo.java**
+>
+> ```java
+> package com.touhid.todo;
 > 
+> import java.util.*;
+> 
+> public class Todo {
+> 	
+> 	private int id;
+> 	private String user;
+> 	private String desc;
+> 	private Date targetDate;
+> 	private boolean isDone;
+>     
+> 	// constructor, getters setters, toString(), hashCode()
+> 
+> }
+> ```
+
+> **/com/touhid/todo/TodoController.java**
+>
+> ```java
+> @Controller
+> public class TodoController {
+> 	
+> 	@Autowired
+> 	TodoService service;
+> 	
+> 	@RequestMapping(value="/list-todos", method=RequestMethod.GET )
+> 	public String showTodoPage(ModelMap model){
+> 		model.addAttribute("todos", service.retrieveTodos("in28Minutes"));
+> 		return "list-todos";
+> 	}
+> }
+> ```
+
+> **/com/touhid/todo/TodoService.java**
+>
+> ```java
+> @Service
+> public class TodoService {
+> 	private static List<Todo> todos = new ArrayList<Todo>();
+> 	private static int todoCount = 3;
+> 	
+> 	static {
+> 		todos.add(new Todo(1, "in28Minutes", "Learn Spring MVC", new Date(),
+> 				false));
+> 		todos.add(new Todo(2, "in28Minutes", "Learn Struts", new Date(), false));
+> 		todos.add(new Todo(3, "in28Minutes", "Learn Hibernate", new Date(),
+> 				false));
+> 	}
+> 	
+> 	public void addTodo(String name, String desc, Date targetDate, boolean isDone) {
+> 		todos.add(new Todo(++todoCount, name, desc, targetDate, isDone));
+> 	}
+> 	
+> 	public List<Todo> retrieveTodos(String user) {
+> 		List<Todo> filteredTodos = new ArrayList<Todo>();
+> 		for (Todo todo : todos) {
+> 			if (todo.getUser().equals(user)) {
+> 				filteredTodos.add(todo);
+> 			}
+> 		}
+> 		return filteredTodos;
+> 	}
+> 	public void deleteTodo(int id) {
+> 		Iterator<Todo> iterator = todos.iterator();
+> 		while (iterator.hasNext()) {
+> 			Todo todo = iterator.next();
+> 			if (todo.getId() == id) {
+> 				iterator.remove();
+> 			}
+> 		}
+> 	}
+> 	
+> }
+> ```
+
+------
+
+> **/views/login.jsp**
+>
+> ```jsp
+> <body>
+> <form action="/login-form" method="post">
+> 	${errorMessage}
+> 	<br><br>
+> 	Enter name <input type="text" name="user_name"/><br><br>
+> 	Enter password <input type="password" name="user_password"/><br><br>
+> 	<input type="submit"value="Login"/>
+> </form>
+> </body>
+> ```
+
+> **/views/welcome.jsp**
+>
+> ```jsp
+> <body>
+> Welcome: 
+> ${username} ,  ${password} 
+> Now you can manage your todos <a href="/list-todos">Todo</a>
+> </body>
+> ```
+
+> /views/list-todos.jsp
+>
+> ```jsp
+> <body>
+> hi i amm ${username} <br>
+> 	${todos}
+> </body>
+> ```

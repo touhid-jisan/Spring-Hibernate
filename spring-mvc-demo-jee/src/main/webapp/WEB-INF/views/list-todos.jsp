@@ -7,8 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-${todos}
-
+hi i amm ${username} <br>
+	${todos}
 </body>
 </html>

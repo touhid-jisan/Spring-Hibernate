@@ -9,5 +9,7 @@
 <body>
 Welcome: 
 ${username} ,  ${password} 
+Now you can manage your todos <a href="/list-todos">Todo</a>
+
 </body>
 </html>
