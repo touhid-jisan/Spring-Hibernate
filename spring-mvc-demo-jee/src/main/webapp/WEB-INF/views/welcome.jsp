@@ -8,6 +8,6 @@
 </head>
 <body>
 Welcome: 
-${username} ,  ${userpass} 
+${username} ,  ${password} 
 </body>
 </html>

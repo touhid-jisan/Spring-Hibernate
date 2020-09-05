@@ -8,7 +8,7 @@
 <title>Yahoo from jsp</title>
 </head>
 <body>
-<form action="/login.do" method="post">
+<form action="/hello" method="post">
 	${errorMessage}
 	<br><br>
 	Enter name <input type="text" name="user_name"/><br><br>

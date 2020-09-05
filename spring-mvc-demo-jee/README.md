@@ -2,7 +2,7 @@
 
 - We need Spring MVC Framework and its dependencies. - **(Add requires jars to the project.)**
 
-- Spring MVC uses Front Controller Pattern -> Dispatcher Servlet. - (Add Dispatcher Servlet to web.xml)
+- Spring MVC uses Front Controller Pattern -> Dispatcher Servlet. - **(Add Dispatcher Servlet to web.xml)**
 
 - DispatcherServlet needs an Spring Application Context to launch. Will create an xml (/WEB-INF/todo-servlet.xml). - **(Add Spring Context)**
 
@@ -138,6 +138,17 @@
 
 
 
+### Spring MVC Request Flow
+
+- DispatcherServlet receives HTTP Request.
+- DispatcherServlet identifies the right Controller based on the URL.
+- Controller executes Business Logic.
+- Controller returns a) Model b) View Name Back to DispatcherServlet.
+- DispatcherServlet identifies the correct view (ViewResolver).
+- DispatcherServlet makes the model available to view and executes it.
+- DispatcherServlet returns HTTP Response Back.
+- Flow : http://docs.spring.io/spring-framework/docs/2.0.8/reference/images/mvc.png
+
 #### Spring MVC Architecture: 
 
 #### 										![](https://www.tutorialspoint.com/spring/images/spring_dispatcherservlet.png)  
@@ -148,54 +159,227 @@
 
 
 
+## Step 4: Add Logging Framework Log4j to understand the flow much more.
+
+
+
+> **/pom.xml**
+>
+> ```xml
+> <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+> <dependency>
+>     <groupId>log4j</groupId>
+>     <artifactId>log4j</artifactId>
+>     <version>1.2.17</version>
+> </dependency>
+> 
+> ```
+
+
+
+> **/src/main/resources/log4j.properties**
+>
+> ```properties
+> log4j.rootLogger=TRACE, Appender1, Appender2
+>  
+> log4j.appender.Appender1=org.apache.log4j.ConsoleAppender
+> log4j.appender.Appender1.layout=org.apache.log4j.PatternLayout
+> log4j.appender.Appender1.layout.ConversionPattern=%-7p %d [%t] %c %x - %m%n
+>  
+> #TRACE
+> #DEBUG
+> #INFO
+> #WARN
+> #ERROR
+> ```
+
+
+
+### log4j Overview:
+
+------
+
+log4j is highly configurable through external configuration files at runtime. It views the logging process in terms of levels of priorities and offers mechanisms to direct logging information to a great variety of destinations, such as a database, file, console, UNIX Syslog, etc.
+
+log4j has three main components:
+
+- **loggers**: Responsible for capturing logging information.
+- **appenders**: Responsible for publishing logging information to various preferred destinations.
+- **layouts**: Responsible for formatting logging information in different styles.
+
+### Pros and Cons of Logging
+
+Logging is an important component of the software development. A well-written logging code offers quick debugging, easy maintenance, and structured storage of an application's runtime information.
+
+Logging does have its drawbacks also. It can slow down an application. If too verbose, it can cause scrolling blindness. To alleviate these concerns, log4j is designed to be reliable, fast and extensible.
 
 
 
 
 
+## Step 5: Important Tasks
+
+- Show userid and password on the welcome page.
+- We will not use Spring Security for now.
+- ModelMap model
+- @RequestParam String name
+
+ 
+
+> 1. Added **method=RequestMethod.POST** 
+> 2. Added **ModelMap**. **ModelMap** is an extension of Model with the ability to store attributes in a map and chain method calls.
+> 3. Used  **@RequestParam** to get the value from jsp form input
+>
+> ```java
+> @Controller
+> public class LoginController {
+> 	
+> 	@RequestMapping(value="/login", method=RequestMethod.GET )
+> 	public String showLoginPage(){
+> 		return "login";
+> 	}
+> 	
+> 	@RequestMapping(value="/login", method=RequestMethod.POST )
+> 	public String showWelcomePage(ModelMap model, @RequestParam String user_name, @RequestParam String user_password){
+> 		model.put("username", user_name);
+> 		model.put("password", user_password);
+> 		return "welcome";
+> 	}
+> }
+> ```
 
 
 
+**Added log4j Dependency**
+
+> **/pom.xml**
+>
+> ```xml
+> <dependency>
+> 	<groupId>log4j</groupId>
+> 	<artifactId>log4j</artifactId>
+> 	<version>1.2.17</version>
+> </dependency>
+> ```
 
 
 
+> **/src/main/resources/log4j.properties**
+>
+> ```properties
+> log4j.rootLogger=TRACE, Appender1, Appender2
+>  
+> log4j.appender.Appender1=org.apache.log4j.ConsoleAppender
+> log4j.appender.Appender1.layout=org.apache.log4j.PatternLayout
+> log4j.appender.Appender1.layout.ConversionPattern=%-7p %d [%t] %c %x - %m%n
+> 
+> #TRACE
+> #DEBUG
+> #INFO
+> #WARN
+> #ERROR
+> #FATAL
+> #ALL
+> ```
 
 
 
+##### Debug Level
+
+We have used DEBUG with both the appenders. All the possible options are:
+
+- TRACE
+- DEBUB
+- INFO
+- WARN
+- ERROR
+- FATAL
+- ALL
 
 
 
+## Step 6:
+
+- Use **LoginValidationService** to validate username and password.
+- Remove all the old controller code and lets use only **Spring MVC** here on.
+- For now : We are not using Spring **Autowiring** for LoginService.
+- Change URL to http://localhost:8080/login
 
 
 
+> **/LoginController.java**
+>
+> ```java
+> @Controller
+> public class LoginController {
+> 	
+> 	LoginValidationService validService = new LoginValidationService();
+> 	
+> 	@RequestMapping(value="/login", method=RequestMethod.GET )
+> 	public String showLoginPage(){
+> 		return "login";
+> 	}
+> 	
+> 	@RequestMapping(value="/login", method=RequestMethod.POST )
+> 	public String showWelcomePage(ModelMap model, @RequestParam String user_name, @RequestParam String user_password){
+> 		if(!validService.isValid(user_name, user_password)) {
+> 			model.put("errorMessage", "Wrong Username or password");
+> 			return "login";
+> 		}
+> 		model.put("username", user_name);
+> 		model.put("password", user_password);
+> 		return "welcome";
+> 	}
+> }
+> ```
+
+------
 
 
 
+> **\LoginValidationService.java**
+>
+> ```java
+> public class LoginValidationService {
+> 	
+> 	public boolean isValid(String username, String password) {
+> 		if(username.equals("touhid") && password.equals("jisan")) {
+> 			return true;
+> 		}
+> 		return false;
+> 	}
+> 	
+> }
+> ```
+
+------
 
 
 
-http://localhost:8080/spring-mvc/login
+> **/src/main/webapp/WEB-INF/views/login.jsp**
+>
+> ```html
+> <body>
+>     <form action="/spring-mvc/login" method="post">
+>         ${errorMessage}
+>         <br><br>
+>         Enter name <input type="text" name="user_name"/><br><br>
+>         Enter password <input type="password" name="user_password"/><br><br>
+>         <input type="submit"value="Login"/>
+>     </form>
+> </body>
+> ```
+
+------
 
 
 
-spring-mvc
+> **/src/main/webapp/WEB-INF/views/welcome.jsp**
+>
+> ```php+HTML
+> <body>
+>     Welcome: 
+>     ${username} ,  ${password} 
+> </body>
+> ```
 
-DispatcherServlet -> Front Controller
-
-
-
-/login -> LoginController (Hadler)
-
-if Responsebody then "hello"
-
-if use @RequestMapping(value="\login", method=requestMethod.GET) then it will search for login.jsp link in the bean
-
-
-
-View Resolver: 
-
-loging-> /WEB-INF/views/login.jsp
-
-
-
-login.jsp -> view
