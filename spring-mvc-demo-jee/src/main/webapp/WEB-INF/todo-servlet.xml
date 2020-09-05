@@ -9,7 +9,7 @@
 	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<context:component-scan
-		base-package="com.touhid.login" />
+		base-package="com.touhid.todo" />
 	<mvc:annotation-driven />
 
 	<bean
