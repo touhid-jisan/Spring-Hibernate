@@ -30,6 +30,13 @@ public class TodoService {
 		}
 		return filteredTodos;
 	}
+	public List<Todo> retrieveTodos( ) {
+		List<Todo> filteredTodos = new ArrayList<Todo>();
+		for (Todo todo : todos) {
+			filteredTodos.add(todo);
+		}
+		return filteredTodos;
+	}
 	public void deleteTodo(int id) {
 		Iterator<Todo> iterator = todos.iterator();
 		while (iterator.hasNext()) {

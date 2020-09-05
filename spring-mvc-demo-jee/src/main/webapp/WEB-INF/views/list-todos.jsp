@@ -9,5 +9,8 @@
 <body>
 hi i amm ${username} <br>
 	${todos}
+	
+	<br><br>
+	<a href="/add-todo">Add new</a>
 </body>
 </html>

@@ -701,3 +701,107 @@ Front Controller:  DispatcherServlet ->  All the request will go first to dispat
 > 	${todos}
 > </body>
 > ```
+
+ 
+
+## Step 10: Two important thing: "redirect:/list-todos" and "model.clear();"
+
+- Add Facility to add New Todo
+- todo.jsp
+- Importance of redirect:/list-todos
+- Importance of model.clear();
+
+> **TodoController.java**
+>
+> ```java
+> @Controller
+> @SessionAttributes("username")
+> public class TodoController {
+> 	
+> 	@Autowired
+> 	TodoService service;
+> 	
+> 	@RequestMapping(value="/list-todos", method=RequestMethod.GET )
+> 	public String showTodoPage(ModelMap model){
+> 		// model.addAttribute("todos", service.retrieveTodos("in28minutes"));
+> 		model.addAttribute("todos", service.retrieveTodos());		
+> 		return "list-todos";
+> 	}
+> 	
+> 	@RequestMapping(value="/add-todo", method =RequestMethod.GET)
+> 	public String addTodo() {
+> 		return "add-todo";
+> 	}
+> 	
+> 	@RequestMapping(value="/add-todo", method =RequestMethod.POST)
+> 	public String addTodoNew(ModelMap model, @RequestParam String name, @RequestParam String desc) {
+> 		service.addTodo(name, desc, new Date(), false); // for the moment date and boolan are hard coded
+> 		return "redirect:list-todos";
+> 	}
+> }
+> ```
+
+> **Todo.java** ->  Same as before
+
+> **TodoService.java** -> added method 
+>
+> ```java
+> public List<Todo> retrieveTodos( ) {
+> 		List<Todo> filteredTodos = new ArrayList<Todo>();
+> 		for (Todo todo : todos) {
+> 			filteredTodos.add(todo);
+> 		}
+> 		return filteredTodos;
+> 	}
+> ```
+
+------
+
+> **login.jsp**
+>
+> ```jsp
+> <body>
+> 	<form action="/login-form" method="post">
+> 		${errorMessage} <br>
+> 		<br> Enter name <input type="text" name="user_name" /><br>
+> 		<br> Enter password <input type="password" name="user_password" /><br>
+> 		<br> <input type="submit" value="Login" />
+> 	</form>
+> </body>
+> ```
+
+> **welcome.jsp**
+>
+> ```jsp
+> <body>
+> 	Welcome: ${username} , ${password} Now you can manage your todos
+> 	<a href="/list-todos">Todo</a>
+> 
+> </body>
+> ```
+
+> **list-todo.jsp**
+>
+> ```jsp
+> <body>
+> hi i amm ${username} <br>
+> 	${todos}
+> 	
+> 	<br><br>
+> 	<a href="/add-todo">Add new</a>
+> </body>
+> ```
+
+> **add-todo.jsp** it will redirect to list-todo.jsp page 
+>
+> ```jsp
+> <body>
+> 	<h1>add to do</h1>
+> 	<form action="" method="post">
+> 		<input type="text" name="name" />
+> 		<input type="text" name="desc" />
+> 		<input type="submit" value="submit" />
+> 	</form>
+> </body>
+> ```
+
