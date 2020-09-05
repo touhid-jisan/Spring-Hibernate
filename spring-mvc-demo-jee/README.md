@@ -376,10 +376,60 @@ We have used DEBUG with both the appenders. All the possible options are:
 
 > **/src/main/webapp/WEB-INF/views/welcome.jsp**
 >
-> ```php+HTML
+> ```html
 > <body>
 >     Welcome: 
 >     ${username} ,  ${password} 
 > </body>
 > ```
 
+## Step 7: 
+
+- Learn about Spring Auto-wiring and Dependency Management.
+- Use Auto-wiring to wire LoginService.
+- @Autowired, @Service
+
+
+
+> **LoginController.java**
+>
+> ```java
+> @Controller
+> public class LoginController {
+> 	
+> 	@Autowired
+> 	private LoginValidationService validService;
+> 	
+> 	@RequestMapping(value="/hello", method=RequestMethod.GET )
+> 	public String showLoginPage(){
+> 		return "login";
+> 	}
+> 	
+> 	@RequestMapping(value="/hello", method=RequestMethod.POST )
+> 	public String showWelcomePage(ModelMap model, @RequestParam String user_name, @RequestParam String user_password){
+> 		if(!validService.isValid(user_name, user_password)) {
+> 			model.put("errorMessage", "Wrong Username or password");
+> 			return "login";
+> 		}
+> 		model.put("username", user_name);
+> 		model.put("password", user_password);
+> 		return "welcome";
+> 	}
+> }
+> ```
+
+
+
+> **LoginValidationService.java**
+>
+> ```java
+> @Service
+> public class LoginValidationService {
+> 	public boolean isValid(String username, String password) {	
+> 		if(username.equals("touhid") && password.equals("jisan")) {
+> 			return true;
+> 		}
+> 		return false;
+> 	}	
+> }
+> ```
