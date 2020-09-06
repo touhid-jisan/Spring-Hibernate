@@ -8,13 +8,12 @@
 <title>Yahoo from jsp</title>
 </head>
 <body>
-<form action="/login-form" method="post">
-	${errorMessage}
-	<br><br>
-	Enter name <input type="text" name="user_name"/><br><br>
-	Enter password <input type="password" name="user_password"/><br><br>
-	<input type="submit"value="Login"/>
-</form>
+	<form action="/login-form" method="post">
+		${errorMessage} <br>
+		<br> Enter name <input type="text" name="user_name" /><br>
+		<br> Enter password <input type="password" name="user_password" /><br>
+		<br> <input type="submit" value="Login" />
+	</form>
 
 </body>
 </html>

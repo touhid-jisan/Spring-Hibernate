@@ -711,6 +711,8 @@ Front Controller:  DispatcherServlet ->  All the request will go first to dispat
 - Importance of redirect:/list-todos
 - Importance of model.clear();
 
+> ------
+>
 > **TodoController.java**
 >
 > ```java
@@ -743,6 +745,8 @@ Front Controller:  DispatcherServlet ->  All the request will go first to dispat
 
 > **Todo.java** ->  Same as before
 
+> ------
+>
 > **TodoService.java** -> added method 
 >
 > ```java
@@ -757,6 +761,8 @@ Front Controller:  DispatcherServlet ->  All the request will go first to dispat
 
 ------
 
+> ------
+>
 > **login.jsp**
 >
 > ```jsp
@@ -770,6 +776,8 @@ Front Controller:  DispatcherServlet ->  All the request will go first to dispat
 > </body>
 > ```
 
+> ------
+>
 > **welcome.jsp**
 >
 > ```jsp
@@ -780,6 +788,8 @@ Front Controller:  DispatcherServlet ->  All the request will go first to dispat
 > </body>
 > ```
 
+> ------
+>
 > **list-todo.jsp**
 >
 > ```jsp
@@ -792,6 +802,8 @@ Front Controller:  DispatcherServlet ->  All the request will go first to dispat
 > </body>
 > ```
 
+> ------
+>
 > **add-todo.jsp** it will redirect to list-todo.jsp page 
 >
 > ```jsp
@@ -803,5 +815,128 @@ Front Controller:  DispatcherServlet ->  All the request will go first to dispat
 > 		<input type="submit" value="submit" />
 > 	</form>
 > </body>
+> ```
+
+
+
+## Step 11: View Todo List In Table using taglib and forEach in JSTL
+
+- Display Todos in a table using JSTL Tags
+- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+- To use JSTL taglib we need jar file so Add Dependency for jstl
+- In .java if we have variable like "isDone" then in JSTL use just "done"
+
+> ------
+>
+> **list-todo.jsp** 
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+	hi i amm ${username}
+	<br>
+	<table border="2px black">
+		<caption>Todos are:</caption>
+		<thead>
+			<tr>Id</tr>
+			<tr>User</tr>
+			<tr>Description</tr>
+			<tr>Date</tr>
+			<tr>Is Completed</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${todos }" var="todo">
+				<tr>
+					<td>${todo.id}</td>
+					<td>${todo.user}</td>
+					<td>${todo.desc}</td>
+					<td>${todo.targetDate}</td>			
+					<td>${todo.done}</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+	<br>
+	<br>
+	<a href="/add-todo">Add new</a>
+</body>
+```
+
+> ------
+>
+> add dependency in **pom.xml**
+
+```xml
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>jstl</artifactId>
+    <version>1.2</version>
+</dependency>
+```
+
+
+
+## Step 12: Bootstrap in JSP
+
+- Add bootstrap to give basic formatting to the page : We use bootstrap classes container,table and table-striped.
+- We will use webjars
+
+> ------
+>
+> in **pom.xml** add to dependency 
+>
+> 1. **add bootstrap dependency**
+> 2. **add jquery dependency**
+>
+> ```xml
+> <dependency>
+>     <groupId>org.webjars</groupId>
+>     <artifactId>bootstrap</artifactId>
+>     <version>4.5.2</version>
+> </dependency>
+> <dependency>
+>     <groupId>org.webjars</groupId>
+>     <artifactId>jquery</artifactId>
+>     <version>3.5.1</version>
+> </dependency>
+> ```
+
+> ------
+>
+> add location of bootstrap.css and jquery file in **todo-list.xml**
+>
+> ```xml
+> <mvc:resources mapping="/webjars/**" location="/webjars/"/>
+> ```
+
+> ------
+>
+> in **list-todo.jsp**
+>
+> ```jsp
+> <head>
+> 	<title>To Do List Table</title>
+>     <!-- Add bootstrap.css src link in jsp -->
+> 	<link href="webjars/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+> </head>
+> <body>
+> 	
+>     <!-- table with bootstrap class tag-->
+>     
+>     <!-- Add jquery and bootstrap.js src link in jsp -->
+> 	<script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+> 	<script src="webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+> </body>
+> </html>
 > ```
 
