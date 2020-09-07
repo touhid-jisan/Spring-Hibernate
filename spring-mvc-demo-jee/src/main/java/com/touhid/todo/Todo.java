@@ -2,19 +2,28 @@ package com.touhid.todo;
 
 import java.util.*;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.Size;
+
 public class Todo {
 	
 	private int id;
+	
+	@Size(min=3, message="Enter at least 6 characters")
 	private String user;
+	
+	@Size(min=3, message="Enter at least 6 characters")
 	private String desc;
+	
 	private Date targetDate;
 	private boolean isDone;
 	public int getId() {
 		return id;
 	}
-	
+	public Todo() {}	
 	public Todo(int id, String user, String desc, Date targetDate, boolean isDone) {
-		super();
 		this.id = id;
 		this.user = user;
 		this.desc = desc;

@@ -940,3 +940,219 @@ Front Controller:  DispatcherServlet ->  All the request will go first to dispat
 > </html>
 > ```
 
+
+
+## Step 13: Delete todo 
+
+- Add functionality to delete a todo
+
+> ------
+>
+> **list-todos.jsp** - added delete button
+>
+> ```jsp
+> <body>
+> 	<div class="container">
+> 		hi i amm ${username} <br>
+> 
+> 		<table class="table table-striped">
+> 			<thead>
+> 				<th>User</th>
+> 				<th>Description</th>
+> 				<th>Date</th>
+> 				<th>Is Completed</th>
+> 				<th></th>
+> 			</thead>
+> 			<tbody>
+> 				<c:forEach items="${todos }" var="todo">
+> 					<tr>
+> 						<td>${todo.user}</td>
+> 						<td>${todo.desc}</td>
+> 						<td>${todo.targetDate}</td>
+> 						<td>${todo.done}</td>
+> 						<td><a class="btn btn-danger" href="/delete-todo?id=${todo.id}">Delete</a></td>
+> 					</tr>
+> 				</c:forEach>
+> 			</tbody>
+> 		</table>
+> 		<div>
+> 			<a class="btn btn-success" href="/add-todo">Add new</a>
+> 		</div>
+> 	</div>
+> 	<script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+> 	<script src="webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+> </body>
+> ```
+>
+> ------
+
+
+
+> ------
+>
+> **TodoController.java** - added delete @RequestMapping
+>
+> ```java
+> 
+> @Controller
+> public class TodoController {   
+>     
+> 	@Autowired
+> 	TodoService service;
+>     
+>     //other request mapping method
+>         
+> 	@RequestMapping(value="/delete-todo", method=RequestMethod.GET)
+> 	public String deleteTodo(ModelMap model, @RequestParam int id) {
+> 		service.deleteTodo(id);
+> 		return "redirect:list-todos";
+>     }
+>     // .......................
+> }
+> ```
+>
+> ------
+
+> ------
+>
+> **TodoService.java** delete service to delete from list
+>
+> ```java
+> @Service
+> public class TodoService {
+> 	private static List<Todo> todos = new ArrayList<Todo>();
+>     
+>     //.......... other codes
+>     
+> 	public void deleteTodo(int id) {
+> 		Iterator<Todo> iterator = todos.iterator();
+> 		while (iterator.hasNext()) {
+> 			Todo todo = iterator.next();
+> 			if (todo.getId() == id) {
+> 				iterator.remove();
+> 			}
+> 		}
+> 	}
+> }
+> ```
+>
+> ------
+
+
+
+## Step 14: Format Input Add Todo and Use Bootstrap to format and add HTML5 Validators
+
+> ------
+>
+> **add-todo.jsp** - added bootstrap and jquery link, updated form using bootstra[]
+>
+> ```jsp
+> <body>
+> 	<div class="container">
+> 		<h1>add to do</h1>
+> 		<form action="" method="post">
+> 
+> 			<fieldset class="form-group">
+> 				<label>Name</label> 
+> 				<input name="name" type="text" class="form-control" required="required" />
+> 					
+> 				 <label>Description</label>
+> 				<input name="desc" type="text" class="form-control" required="required" />
+> 			</fieldset>
+> 
+> 			<input class="btn btn-success" type="submit" value="Add">
+> 		</form>
+> 	</div>
+> 	<script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+> 	<script src="webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+> </body>
+> ```
+>
+> ------
+
+
+
+## Step 15: Form validation*** Using Hibernate
+
+
+
+> using spring framework form jsp. use taglib to use spring framework form
+>
+> ```jsp
+> <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+> ```
+
+
+
+> form validation using commandName="todo"
+>
+> ```jsp
+> <form:form action="/add-todo" method="post" commandName="todo">
+> 	<fieldset class="form-group">
+> 		<form:label path="desc">Description</form:label>
+> 		<form:input path="desc" type="text" class="form-control" required="required"/>		
+> 	</fieldset>
+> </form:form>
+> ```
+>
+> a
+
+
+
+> adding hibernate validator dependency 
+>
+> ```xml
+> <dependency>
+>     <groupId>org.hibernate</groupId>
+>    	<artifactId>hibernate-validator</artifactId>
+>     <version>5.0.2.Final</version>
+>  </dependency>
+> ```
+>
+> a
+
+
+
+> a
+>
+> ```java
+> @Size(min = 10, message = "Enter atleast 10 Characters.")
+> ```
+>
+> a
+
+
+
+> @Valid - this would cause validation to be triggered.  and whenever we do some validation we would get some results from it. if we want to access the results of the validation we need another parameter -  (BindingResult result)
+>
+> ```java
+> @Valid Todo todo, BindingResult result
+> ```
+>
+> a
+
+
+
+> a
+>
+> ```java
+> if (result.hasErrors())
+> 	return "todo";
+> ```
+>
+> a
+
+
+
+> a
+>
+> ```jsp
+> <form:errors path="desc" cssClass="text-warning" />
+> ```
+>
+> a
+
+
+
+- form tags for everything
+- commandName = "todo", if we want to use commandName = "todo" we have make that todo available in the model. mode.attribute("todo",  ) 

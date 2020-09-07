@@ -38,6 +38,7 @@ public class TodoService {
 		return filteredTodos;
 	}
 	public void deleteTodo(int id) {
+		System.out.println(id);
 		Iterator<Todo> iterator = todos.iterator();
 		while (iterator.hasNext()) {
 			Todo todo = iterator.next();
@@ -45,6 +46,7 @@ public class TodoService {
 				iterator.remove();
 			}
 		}
+		
 	}
 	
 }
