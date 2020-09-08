@@ -199,3 +199,231 @@ For example :
 1. Define Service Interface
 2. Define Service Implementation
    1. Inject the CustomerDAO
+
+
+
+
+
+# Add a Customer  
+
+Annotation Lists: 
+
+- @Autowired
+- **In Controller :**  @RequestMapping("")   ||  @GetMapping("/")   ||  @PostMapping("/")
+- **In Service:** @Service  ||  @Transactional
+- **In DAO:** @Repository
+- **In Model:** @Entity ||   @Table(name = "")  ||  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)  ||  @Column(name = "id")
+
+Todo: 
+
+1. Update list-customer.jsp (add new button [ Add Customer] )
+
+2. Create HTML form for new customer
+
+3. Process Form Data
+
+   1. Controller -> Service -> DAO
+
+      > in controller to create a model attribute to bind form data
+
+   > Add form tag lib
+   >
+   > ```jsp
+   > <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
+   > ```
+
+   
+
+   > Controller
+
+   > ****
+   >
+   > CustomerController.java
+   >
+   > ```java
+   > Controller
+   > @RequestMapping("/customer")
+   > public class CustomerController {
+   > 	
+   > 	// inject the dao - customer service  
+   > 	@Autowired
+   > 	private CustomerService customerService;
+   > 	
+   > 	@GetMapping("/list")
+   > 	public String listCustomer(Model model) {
+   > 		
+   > 		// get customers from the service
+   > 		List<Customer> theCustomers = customerService.getCustomers();
+   > 		
+   > 		// add the customers to the model
+   > 		model.addAttribute("customers", theCustomers);
+   > 		
+   > 		return "list-customer";
+   > 	}
+   > 	
+   > 	@GetMapping("/new-customer")
+   > 	public String newCustomerPage(Model model) {
+   > 		Customer theCustomer = new Customer();
+   > 		model.addAttribute("customer" , theCustomer);
+   > 		return "add-customer";
+   > 	}
+   > 	
+   > 	@PostMapping("/add-customer")
+   > 	public String addCustomer(@ModelAttribute("customer") Customer customer, BindingResult result ) {
+   > 		if(result.hasErrors()) {
+   > 			return "add-customer";
+   > 		} 
+   > 		customerService.saveCustomer(customer);
+   > 		return "redirect:/customer/list";
+   > 	}
+   > }
+   > ```
+   >
+   > ****
+
+   
+
+   > Service
+
+   > ****
+   >
+   > CustomerService .java
+   >
+   > ```java
+   > public interface CustomerService {
+   > 	
+   > 	public List<Customer> getCustomers() ;
+   > 
+   > 	public void saveCustomer(Customer customer);
+   > }
+   > ```
+   >
+   > 
+   >
+   > CustomerService.java
+   >
+   > ```java
+   > @Service
+   > public class CustomerServiceImpl implements CustomerService {
+   > 
+   > 	@Autowired
+   > 	private CustomerDAO customerDAO;
+   > 	
+   > 	@Override
+   > 	@Transactional
+   > 	public List<Customer> getCustomers() {
+   > 		return customerDAO.getCustomers();
+   > 	}
+   > 
+   > 	@Override
+   > 	@Transactional
+   > 	public void   saveCustomer(Customer customer) {
+   > 		customerDAO.saveCustomer(customer);
+   > 		
+   > 	}
+   > }
+   > ```
+   >
+   > ****
+
+   
+
+   > DAO
+
+   > ****
+   >
+   > CustomerDAO.java
+   >
+   > ```java
+   > public interface CustomerDAO {
+   > 	
+   > 	public List<Customer> getCustomers();
+   > 
+   > 	public void saveCustomer(Customer customer);
+   > 	
+   > }
+   > ```
+   >
+   > CustomerDAO.java
+   >
+   > ```java
+   > @Repository
+   > public class CustomerDAOImpl implements CustomerDAO {
+   > 
+   > 	//need to inject the session factory
+   > 	@Autowired
+   > 	private SessionFactory sessionFactory;
+   > 	
+   > 	@Override
+   > 	public List<Customer> getCustomers() {
+   > 		
+   > 		// get current session
+   > 		Session currentSession = sessionFactory.getCurrentSession();
+   > 		
+   > 		// create a query
+   > 		Query<Customer> theQuery = currentSession.createQuery("from Customer order by firstName", Customer.class);	
+   > 		
+   > 		// execute the query and get result
+   > 		List<Customer> customers = theQuery.getResultList();
+   > 		return customers;
+   > 	}
+   > 
+   > 	@Override
+   > 	public void saveCustomer(Customer customer) {
+   > 	
+   > 		Session currentSession = sessionFactory.getCurrentSession();
+   > 		currentSession.save(customer);
+   > 		
+   > 	}
+   > }
+   > ```
+   >
+   > ****
+
+   
+
+   > Entity
+
+   > ****
+   >
+   > Customer.java
+   >
+   > ```java
+   > @Entity
+   > @Table(name = "customer")
+   > public class Customer {
+   > 
+   > 	@Id
+   > 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+   > 	@Column(name = "id")
+   > 	private int id;
+   > 
+   > 	@Column(name = "first_name")
+   > 	private String firstName;
+   > 
+   > 	@Column(name = "last_name")
+   > 	private String lastName;
+   > 
+   > 	@Column(name = "email")
+   > 	private String email;
+   > 	
+   > 	public Customer() {}
+   > 
+   > 	// getters setters
+   > 	
+   > 	@Override
+   > 	public String toString() {
+   > 		return "Customer [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+   > 	}	
+   > }
+   > ```
+   >
+   > ****
+   >
+   > 
+   >
+   > 
+
+   
+
+   

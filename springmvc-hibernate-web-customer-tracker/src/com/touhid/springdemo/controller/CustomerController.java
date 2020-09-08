@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.touhid.springdemo.dao.CustomerDAO;
@@ -30,5 +33,21 @@ public class CustomerController {
 		model.addAttribute("customers", theCustomers);
 		
 		return "list-customer";
+	}
+	
+	@GetMapping("/new-customer")
+	public String newCustomerPage(Model model) {
+		Customer theCustomer = new Customer();
+		model.addAttribute("customer" , theCustomer);
+		return "add-customer";
+	}
+	
+	@PostMapping("/add-customer")
+	public String addCustomer(@ModelAttribute("customer") Customer customer, BindingResult result ) {
+		if(result.hasErrors()) {
+			return "add-customer";
+		} 
+		customerService.saveCustomer(customer);
+		return "redirect:/customer/list";
 	}
 }

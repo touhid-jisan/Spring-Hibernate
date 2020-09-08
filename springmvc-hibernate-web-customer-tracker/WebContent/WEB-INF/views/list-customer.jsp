@@ -38,13 +38,13 @@
 					<td>${customer.firstName}</td>
 					<td>${customer.lastName}</td>
 					<td>${customer.email}</td>
-					<td><a href="/update?id=${customer.id}" class="btn btn-primary mr-1">Update</a>  
-					  <a href="/delete?id=${customer.id}" class="btn btn-danger">Delete</a></td>
+					<td><a href="update?id=${customer.id}" class="btn btn-primary mr-1">Update</a>  
+					  <a href="delete?id=${customer.id}" class="btn btn-danger">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	<a href="/add-new" class="btn btn-success">Add New Customer</a>
+	<a href="new-customer" class="btn btn-success">Add New Customer</a>
 </div>
 
 
