@@ -69,7 +69,7 @@
 
 
 
-## Spring @Transactional
+# Spring @Transactional
 
 - automatically begin and end transaction for hibernate code
 - no need for to do this in code
@@ -123,7 +123,7 @@ public interface CustomerDAO {
 
 
 
-## Add bootstrap manually in /resources folder
+# Add bootstrap manually in /resources folder
 
 ```xml
 	<!-- add bootstrap manually in resourses folder -->
@@ -142,3 +142,60 @@ public interface CustomerDAO {
 </head>
 ```
 
+
+
+# Constraint the Request Mapping - Get and Post 
+
+```java
+@RequestMapping(path="/processFormGet" , method="RequestMehtod.GET")
+public String processFormGet( ) {
+
+}
+@RequestMapping(path="/processFormPost" , method="RequestMehtod.POST")
+public String processFormPost( ) {
+
+}
+```
+
+- The mapping Only handles GET method
+- Any other HTTP REQUEST method will get rejected
+
+## New Annotation Short-Cut
+
+**@GetMapping("")** and **@PostMapping("")**
+
+```JAVA
+@GerMapping("/processFormGet")
+public String processFormGet(....) {
+	.....			
+}
+
+@GerMapping("/processFormPost")
+public String processFormPost(....) {
+	.....			
+}
+```
+
+
+
+# Specialized Annotation for Service
+
+
+
+#### Add a Service Layer
+
+> Customer Controller <------> Customer Service <------> Customer DAO <------> DB
+
+
+
+##### @Service Annotation
+
+- @Service will automatically register the Service implementation - thanks to component scanning. 
+
+For example :
+
+**Customer Service:**
+
+1. Define Service Interface
+2. Define Service Implementation
+   1. Inject the CustomerDAO
