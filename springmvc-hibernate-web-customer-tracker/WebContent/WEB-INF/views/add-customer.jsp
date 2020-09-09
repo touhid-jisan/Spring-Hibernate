@@ -25,7 +25,8 @@
 
 		<form:form action="add-customer" modelAttribute="customer"
 			method="POST">
-
+			<form:hidden path="id"/>
+			
 			<h2>Customer Information</h2>
 			<div class="form-group">
 				<label>First Name</label>

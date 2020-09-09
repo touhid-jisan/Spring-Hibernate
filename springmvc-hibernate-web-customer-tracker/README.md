@@ -1,6 +1,4 @@
-![](CRM crud.assets/CRM-ArchitectureDemo.png)
-
-
+![](README.assets/CRM-ArchitectureDemo.png)
 
 
 
@@ -10,7 +8,7 @@
 
 - This is a common design pattern : **Data Access Object (DAO)**
 
-  ![](CRM crud.assets/CustomerDataObject.png)
+  ![](README.assets/CustomerDataObject.png)
 
 
 
@@ -20,7 +18,7 @@
 
 
 
-![](CRM crud.assets/hibernate_session_factory.png)
+![](README.assets/customer data access object.png)
 
 
 
@@ -30,7 +28,7 @@
 
   - The data source defines database connection info
 
-    ![](CRM crud.assets/customer data access object.png)
+    ![](README.assets/hibernate_session_factory.png)
 
 **Data Source :**  Data Source tells us hot to connect with database
 
@@ -420,10 +418,104 @@ Todo:
    >
    > ****
    >
-   > 
+   
+   
+   
+# Update Customer 
+   
+> **list-customer.jsp**
    >
+   > ```jsp
+   > <c:url var="updateLink" value="">
+   > 	<c:param name="customerId" value="${customer.id }" />
+   > </c:url>
    > 
-
+   > <tr>
+   > 	<td>${customer.firstName}</td>
+   > 	<td>${customer.lastName}</td>
+   > 	<td>${customer.email}</td>
+   > 	
+   >    	<td><a href="${updateLink}" class="btn btn-primary mr-1">Update</a></td>
+   > </tr>
+   > ```
+   
+   
+   
+   ## Remember: 
+   
+   - When FORM is **SUBMITTED** Spring MVC will call **SETTER Methods** 
+   - When FORM is **LOADED**  Spring MVC will call **GETTER Methods**
+   
+   ### saveOrUpdate():
+   
+   ```java
+   // currentSession.saveOr(customer);
+      currentSession.saveOrUpdate(customer);
+   ```
+   
+   ![](README.assets/saveOrupdate.png)
+   
+   
+   
+   
+   
+   # Delete Customer
+   
+   > **list-customer.jsp** 
+   
+   ```jsp
+   <c:url var="deleteLink" value="deleteCustomer">
+   	<c:param name="customerId" value="${customer.id }" />
+   </c:url>
+   
+   <tr>
+   	<td>${customer.firstName}</td>
+   	<td>${customer.lastName}</td>
+   	<td>${customer.email}</td>
+   	<td>
+           <a href="${updateLink}" class="btn btn-primary mr-1">Update</a>
+   		| <a href="deleteLink" class="btn btn-danger">Delete</a>
+       </td>
+   </tr>
+   ```
+   
+   > CustomerController.java
+   >
+   > ```java
+   >@GetMapping("/deleteCustomer")
+   > public String deleteCustomer(@RequestParam("customerId") int id, Model model) {
+   > 	customerService.deleteCustomer(id);
+   > 	return "redirect:/list-customer";
+   > }
+   > ```
+   > 
+   > CustomerServiceImpl.java
+   > 
+   > ```java
+   > @Override
+   > @Transactional
+   > public void deleteCustomer(int id) {
+   > 	customerDAO.deleteCustomer(id);
+   > }
+   > ```
+   > 
+   > CustomerDAOImpl.java
+   > 
+   > ```java
+   > @Override
+   > public void deleteCustomer(int id) {
+   > 	Session currentSession = sessionFactory.getCurrentSession();
+   > 	Query theQuery = currentSession.createQuery("delete from Customer where id=:customerId", Customer.class);
+   > 	theQuery.setParameter("customerId", id);
+   > 	theQuery.executeUpdate();
+   > }
+   > ```
+   > 
+   > ****
+   
+   
+   
+   
+   
    
 
-   
