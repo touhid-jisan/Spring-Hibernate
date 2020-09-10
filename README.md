@@ -1,6 +1,6 @@
 # Theory
 
-### Iversion of Control (IoC)
+## <u>Iversion of Control (IoC)</u>
 
 - The approach of outsourcing the construction and management of objects.
 
@@ -12,7 +12,7 @@
 
   
 
-#### Solution
+#### Solution:
 
 <img src="https://githubpictures.000webhostapp.com/pictures/ObjectFactory_IoC.png" style="zoom:50%;" />
 
@@ -28,9 +28,13 @@
 
 
 
-### Dependency Injection:
+## <u>Dependency Injection:</u>
+
+
 
 <img src="https://githubpictures.000webhostapp.com/pictures/DI.png" style="zoom:50%;" />
+
+
 
 > When writing a complex Java application, application classes should be as independent as possible of other Java classes to increase the possibility to reuse these classes and to test them independently of other classes while unit testing. Dependency Injection (or sometime called wiring) helps in gluing these classes together and at the same time keeping them independent.
 
@@ -49,9 +53,109 @@
 
 
 
+## <u>Bean Scopes:</u>
+
+- Scopes refers to lifecycle of a bean.
+- How long does the bean live?
+- How many instrance are Created?
+- How is bean Shared
 
 
-## ** Spring Container**
+
+**What is Singleton?**
+
+- Spr  ing Container create only one instance of the bean by default.
+- It is cached memory.
+- All request for the bean 
+  - Will return SHARED Reference to the same bean
+
+
+
+
+
+![(README.assets/singleton.png)](https://githubpictures.000webhostapp.com/pictures/singleton.png)
+
+- Points to the same object .
+- Memory location for "**theCoach**" & "**alphaCoach**" is same.
+
+**Prototype:**
+
+- Creates new reference 
+
+![](https://githubpictures.000webhostapp.com/pictures/prototype.png)
+
+- thaCoach and alphaCoach points to the different object.
+- Memory location for "theCoach" and "alphaCoach" is differenct.
+
+
+
+ **Additional Spring Bean Scopes:**
+
+| Scope          | Description                                                 |
+| -------------- | ----------------------------------------------------------- |
+| singleton      | Create a single shared instance of the bean. Default scope. |
+| prototype      | Creates a new bean instance for each container request.     |
+| request        | Scoped to an HTTP web request. Only used for web apps.      |
+| session        | Scoped to an HTTP web session. Only used for web apps.      |
+| global-session | Scoped to a global HTTP web session. Only used for web apps |
+
+ ![](https://githubpictures.000webhostapp.com/pictures/beanlifecycle.png)
+
+
+
+**Bean init-method:**
+
+![](https://githubpictures.000webhostapp.com/pictures/init-method.png)
+
+
+
+**Bean destroy-method:**
+
+![](https://githubpictures.000webhostapp.com/pictures/destroy-method.png)
+
+
+
+
+
+Code Example :
+
+> beanlifecycle.xml
+>
+> ```xml
+> <bean id="myFortuneService" class="com.luv2code.springdemo.HappyFortuneService"> </bean>
+> 	<bean id="myCoach" class="com.luv2code.springdemo.TrackCoach" init-method="doMyStartupStuff" destroy-method="doMyCleanupStuffYoYo">
+> 	<!--  set up constructor injection  -->
+> 	<constructor-arg ref="myFortuneService"/>
+> </bean>
+> ```
+>
+> 
+>
+> TrackCoach.java
+>
+> ```java
+> 	// add an init method
+> 	public void doMyStartupStuff() {
+> 		System.out.println("TrackCoach: inside method doMyStartupStuff");
+> 	}
+> 	
+> 	// add a destroy method
+> 	public void doMyCleanupStuffYoYo() {
+> 		System.out.println("TrackCoach: inside method doMyCleanupStuffYoYo");		
+> 	}
+> ```
+>
+> ****
+
+
+
+****
+
+****
+
+
+
+## <u>Spring Container</u>
 
 #### Primary Functions:
 
@@ -63,3 +167,4 @@
 1. [XML Configuration file (legacy, but most legacy app still use it)](https://github.com/touhid-jisan/Spring-Hibernate/blob/master/Practice/XML%20Configuration%20Spring%20Container.md)
 2. Java Annotations (modern)
 3. Java Source Code (modern)
+
