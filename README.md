@@ -103,50 +103,6 @@
 
 
 
-**Bean init-method:**
-
-![](https://githubpictures.000webhostapp.com/pictures/init-method.png)
-
-
-
-**Bean destroy-method:**
-
-![](https://githubpictures.000webhostapp.com/pictures/destroy-method.png)
-
-
-
-
-
-Code Example :
-
-> beanlifecycle.xml
->
-> ```xml
-> <bean id="myFortuneService" class="com.luv2code.springdemo.HappyFortuneService"> </bean>
-> 	<bean id="myCoach" class="com.luv2code.springdemo.TrackCoach" init-method="doMyStartupStuff" destroy-method="doMyCleanupStuffYoYo">
-> 	<!--  set up constructor injection  -->
-> 	<constructor-arg ref="myFortuneService"/>
-> </bean>
-> ```
->
-> 
->
-> TrackCoach.java
->
-> ```java
-> 	// add an init method
-> 	public void doMyStartupStuff() {
-> 		System.out.println("TrackCoach: inside method doMyStartupStuff");
-> 	}
-> 	
-> 	// add a destroy method
-> 	public void doMyCleanupStuffYoYo() {
-> 		System.out.println("TrackCoach: inside method doMyCleanupStuffYoYo");		
-> 	}
-> ```
->
-> ****
-
 
 
 ****

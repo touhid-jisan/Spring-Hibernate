@@ -361,7 +361,7 @@ Development Process
 
 
 
-### Bean Life Cycle Mehthod 
+### Bean Life Cycle Method 
 
 **@PostConstruct** (in xml config its **init-method="doMyStartupStaff()"**)
 
@@ -380,7 +380,7 @@ Development Process
 >
 > ****
 
-**@PreDestroy** (in xml config its **init-method="doMyStartupStuff()"**)
+**@PreDestroy** (in xml config its **destroy-method="doMyCleanupStuffYoYo()"**)
 
 > For @PostConstruct , the mehod will execute **before** bean is destroyed
 >
@@ -389,7 +389,7 @@ Development Process
 > public class TennisCoach implements Coach {
 > 	
 > 	@PreDestroy
-> 	public void doMyStartupStuff() {
+> 	public void doMyCleanupStuff() {
 > 		...
 > 	}
 > }
