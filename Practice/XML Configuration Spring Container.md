@@ -73,9 +73,7 @@
 
   
 
-    ![](/home/boogeyman/Desktop/qa/Iversion of Control (IoC).assets/object.png)
-
-  
+  ![](https://githubpictures.000webhostapp.com/pictures/object.png)
 
   ### Step 1: Define the dependency Interface and The implementaion class
 
@@ -133,7 +131,7 @@
   > </bean>
   > ```
   >
-  > ![](/home/boogeyman/Desktop/qa/Iversion of Control (IoC).assets/spring_backfround.png)
+  > ![](https://githubpictures.000webhostapp.com/pictures/spring_backfround.png)
   >
   > ****
 
@@ -188,7 +186,7 @@
   >
   > **How Spring Processes Config File**
   >
-  > ![](/home/boogeyman/Desktop/qa/Iversion of Control (IoC).assets/springsetter.png)
+  > ![](https://githubpictures.000webhostapp.com/pictures/springsetter.png)
   >
   > ****
 
