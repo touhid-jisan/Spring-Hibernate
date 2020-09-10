@@ -165,6 +165,6 @@ Code Example :
 #### Configuring Spring Container: 
 
 1. [XML Configuration file (legacy, but most legacy app still use it)](https://github.com/touhid-jisan/Spring-Hibernate/blob/master/Practice/XML%20Configuration%20Spring%20Container.md)
-2. Java Annotations (modern)
+2. [Java Annotations (modern)](https://github.com/touhid-jisan/Spring-Hibernate/blob/master/Practice/Java%20Annotations%20(modern).md)
 3. Java Source Code (modern)
 
