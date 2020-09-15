@@ -10,4 +10,15 @@ public class HomeController {
 	public String showHome() {
 		return "home";
 	}
+	
+	// add request mapping for /leaders
+	@GetMapping("/leaders")
+	public String showLeader() {
+		return "leaders";
+	}
+	
+	@GetMapping("/system")
+	public String showSystem() {
+		return "system";
+	}
 }

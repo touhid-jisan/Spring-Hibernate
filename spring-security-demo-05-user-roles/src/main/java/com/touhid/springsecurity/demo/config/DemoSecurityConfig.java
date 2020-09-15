@@ -16,28 +16,30 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
 		UserBuilder users = User.withDefaultPasswordEncoder();
-		auth.inMemoryAuthentication().withUser(users.username("touhid").password("isra").roles("manager"));
-		auth.inMemoryAuthentication().withUser(users.username("jisan").password("12345").roles("user","employee"));
-		auth.inMemoryAuthentication().withUser(users.username("islam").password("isra").roles("applicatnt"));
-		auth.inMemoryAuthentication().withUser(users.username("raisa").password("459").roles("kamer_beti"));
+		auth.inMemoryAuthentication().withUser(users.username("touhid").password("1234").roles("USER","MANAGER", "ADMIN"));
+		auth.inMemoryAuthentication().withUser(users.username("jisan").password("12345").roles("USER","ADMIN"));
+		auth.inMemoryAuthentication().withUser(users.username("islam").password("1234").roles("USER"));
+		auth.inMemoryAuthentication().withUser(users.username("raisa").password("1234").roles("USER","ADMIN"));
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.authorizeRequests()
-			.anyRequest()
-			.authenticated()
+			.antMatchers("/").hasRole("USER")
+			.antMatchers("/leaders/**").hasRole("MANAGER")
+			.antMatchers("/system/**").hasRole("ADMIN")
 			.and()
 			.formLogin()
 			.loginPage("/showMyLoginPage")
 			.loginProcessingUrl("/authenticateTheUser")
 			.permitAll()
 			.and()
-			.logout().permitAll();
+			.logout().permitAll()
+			.and()
+			.exceptionHandling().accessDeniedPage("/access-denied");
 		
 	}
 		
 
-	
 }
