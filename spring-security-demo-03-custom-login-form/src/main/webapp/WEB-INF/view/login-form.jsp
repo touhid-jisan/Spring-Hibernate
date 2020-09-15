@@ -16,8 +16,7 @@
 	src="//maxcdn.bootstrapcdn.com/boots trap/4.0.0/js/bootstrap.min.js"></script>
 <script
 	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<style type="text/css">
-</style>
+
 </head>
 
 <body>
@@ -25,22 +24,22 @@
 		<div id="formContent">
 			<!-- Tabs Titles -->
 
-			<!-- Icon -->
-			<div class="fadeIn first">
-				<br> <br>
-			</div>
-
 			<form:form
 				action="${pageContext.request.contextPath }/authenticateTheUser"
 				method="POST">
 
-			
-					<c:if test="${ param.error != null}">
-						<div class="alert alert-danger" role="alert">	
-						Sorry! you entered wrong username or password</div>
-					</c:if>
 
-					
+				<c:if test="${ param.error != null}">
+					<div class="alert alert-danger" role="alert">Sorry! you
+						entered wrong username or password</div>
+				</c:if>
+				<c:if test="${param.logout != null}">
+
+					<div class="alert alert-success col-xs-offset-1 col-xs-10">
+						You have been logged out.</div>
+
+				</c:if>
+
 				<input type="text" id="login" class="fadeIn second" name="username"
 					placeholder="login">
 				<input type="text" id="password" class="fadeIn third"
