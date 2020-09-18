@@ -5,6 +5,7 @@
 **Annotations:** 
 
 1. **@JsonIngnoreProperties(ignoreUnknown=true)**
+2. **@RestController** - (extension of @Controller)
 
 
 
@@ -315,7 +316,33 @@
 
 - Send HTTP request to the REST Web Service / API
 - Plenty of tools : curl, **Postman** etc.
-- 
+
+
+
+
+
+
+
+#### Spring Rest Controller:
+
+- New annotation **@RestController**
+  - Extension of @Controller
+  - Handles REST request and responses
+- Spring REST will also automatically convert Java to POJOs to JSON
+  - As long as the Jackson Project is on the class path or pom.xml
+
+<script src="https://gist.github.com/touhid-jisan/94a18f509b20cebd245677c85485946c.js"></script>
+
+
+
+#### Spring REST Controller Development Process:
+
+- **Step 1:** Add Maven dependency for Spring MVC and Jackson project - [pom.xml](https://gist.github.com/touhid-jisan/282bdbf9b731c4bb3baf5ca6b2e41c4f#file-pom-xml)
+- **Step 2:** Add code for all Java Config: @Configuration - [DemoAppConfig.java](https://gist.github.com/touhid-jisan/282bdbf9b731c4bb3baf5ca6b2e41c4f#file-demoappconfig-java) 
+- **Step 3:** Add code for all Java Config: Servlet Initializer - [MySpringMvcDispatcherServletInitializer.java](https://gist.github.com/touhid-jisan/282bdbf9b731c4bb3baf5ca6b2e41c4f#file-myspringmvcdispatcherservletinitializer-java)
+- **Step 4:** Create Spring REST Service uising **@RestController** - [DemoRestController.java](https://gist.github.com/touhid-jisan/282bdbf9b731c4bb3baf5ca6b2e41c4f#file-demorestcontroller-java)
+
+<script src="https://gist.github.com/touhid-jisan/282bdbf9b731c4bb3baf5ca6b2e41c4f.js"></script>
 
 
 
