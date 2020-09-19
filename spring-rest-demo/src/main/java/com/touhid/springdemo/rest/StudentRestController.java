@@ -47,32 +47,4 @@ public class StudentRestController {
 		// just index into the list... keeping to simple for now
 		return theStudents.get(studentId);
 	}
-
-	@ExceptionHandler
-	public ResponseEntity<StudentErrorResponses> handlerException(StudentNotFoundException e) {
-
-		// create a StudentErrorResponse
-		StudentErrorResponses error = new StudentErrorResponses();
-
-		error.setStatus(HttpStatus.NOT_FOUND.value());
-		error.setMessage(e.getMessage());
-		error.setTimeStamp(System.currentTimeMillis());
-
-		// return ResponseEntity
-		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-	}
-
-	// add annother exception handler // to catch any exception (catch alll)
-	@ExceptionHandler
-	public ResponseEntity<StudentErrorResponses> handlerException(Exception e) {
-//		create a StudentErrorResponse
-		StudentErrorResponses error = new StudentErrorResponses();
-
-		error.setStatus(HttpStatus.BAD_REQUEST.value());
-		error.setMessage("Bad Request");
-		error.setTimeStamp(System.currentTimeMillis());
-		
-		return new ResponseEntity<StudentErrorResponses>(error, HttpStatus.BAD_REQUEST);
-	}
-
 }
