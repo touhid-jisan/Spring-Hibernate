@@ -14,7 +14,6 @@ import com.touhid.springdemo.service.CustomerService;
 @RestController
 @RequestMapping("/api")
 public class CustomerRestController {
-	private List<Customer> theCustomers;
 
 	@Autowired
 	private CustomerService customerService;
@@ -22,13 +21,16 @@ public class CustomerRestController {
 	@GetMapping("/customers")
 	public List<Customer> getCustomers() {
 		
-		theCustomers = customerService.getCustomers();	
-		return theCustomers;
+		return customerService.getCustomers();
 	}
 	
 	@GetMapping("/customers/{theId}")
 	public Customer getCustomer(@PathVariable int theId) {
 		
+		Customer theCustomer = customerService.getCustomer(theId);
+		if(theCustomer == null) {
+			throw new CustomerNotFoundException("Customer not found: " + theId);
+		}
 		return customerService.getCustomer(theId);
 	}
 	
