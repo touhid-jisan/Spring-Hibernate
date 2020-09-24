@@ -212,6 +212,8 @@ transaction.commit();
 
   **Step 2: Use Repository in the app** 
 
+  no need to use **@Transactional** since **JpaRepository** provides this functionally
+
   ```java
   @Service
   public class EmployeeServiceImpl implements EmployeeService {
@@ -238,6 +240,10 @@ transaction.commit();
   - Extending and adding custom queries with JPQL
   - Query Domain Specific Language (Query DSL)
   - Defining custom methods (low-level coding)
+
+
+
+
 
 
 
