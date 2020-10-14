@@ -4,10 +4,13 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-@Service
-@Profile("ban")
-@Primary
-public class SpanishPrimaryGreetingService implements GreetingService{
+public class PrimarySpanishGreetingService implements GreetingService{
+
+    private GreetingRepository greetingRepository;
+
+    public PrimarySpanishGreetingService(GreetingRepository greetingRepository) {
+        this.greetingRepository = greetingRepository;
+    }
 
     @Override
     public String sayHello() {
